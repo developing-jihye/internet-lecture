@@ -52,5 +52,22 @@ public class CourceService {
         );
     }
 
-    //
+    // 강의 수정
+    public String update(Long courseId, CourseUpdateRequestDto updateRequestDto) {
+        Course course = courseRepository.findById(courseId).orElseThrow(
+                () -> new NoSuchElementException("해당 아이디의 강의가 없습니다.")
+        );
+
+        Course updatedCourse = new Course(
+                updateRequestDto.title(),
+                updateRequestDto.description(),
+                course.getInstructor(),
+                updateRequestDto.price(),
+                course.getCategory()
+        );
+
+        courseRepository.save(updatedCourse);
+
+        return "강의 정보 수정이 완료되었습니다.";
+    }
 }
