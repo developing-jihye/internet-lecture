@@ -2,6 +2,7 @@ package practice.internet_lecture.student;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import practice.internet_lecture.course.EnrollRequestDto;
 
@@ -21,7 +22,7 @@ public class StudentRestController {
 
     // 수강신청
     @PostMapping("/enrollments")
-    public String enroll(EnrollRequestDto requestDto) {
-        return null;
+    public String enroll(@RequestBody EnrollRequestDto requestDto) {
+        return studentService.enroll(requestDto);
     }
 }
