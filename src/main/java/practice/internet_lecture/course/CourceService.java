@@ -3,8 +3,10 @@ package practice.internet_lecture.course;
 import org.springframework.stereotype.Service;
 import practice.internet_lecture.instructor.Instructor;
 import practice.internet_lecture.instructor.InstructorRepository;
+import practice.internet_lecture.student.Enrollment;
+import practice.internet_lecture.student.EnrollmentRepository;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -12,10 +14,12 @@ public class CourceService {
 
     private final CourseRepository courseRepository;
     private final InstructorRepository instructorRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
-    public CourceService(CourseRepository courseRepository, InstructorRepository instructorRepository) {
+    public CourceService(CourseRepository courseRepository, InstructorRepository instructorRepository, EnrollmentRepository enrollmentRepository) {
         this.courseRepository = courseRepository;
         this.instructorRepository = instructorRepository;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
     // 강의 등록
@@ -40,12 +44,19 @@ public class CourceService {
                 () -> new NoSuchElementException("해당 아이디의 강의가 없습니다.")
         );
 
+        List<Enrollment> enrollments = enrollmentRepository.findAllByCourseId(courseId);
+
         return new CourseDetailResponseDto(
                 selectedCourse.getTitle(),
                 selectedCourse.getDescription(),
                 selectedCourse.getPrice(),
-                selectedCourse.getNumOfStudents(),
-                new ArrayList<>(),
+                enrollments.size(),
+                enrollments.stream().map(
+                        e -> new CourseDetailResponseDto.StudentResponseDto(
+                                e.getStudent().getNickname(),
+                                e.getEnrolledAt()
+                        )
+                ).toList(),
                 selectedCourse.getCategory(),
                 selectedCourse.getCreatedAt(),
                 selectedCourse.getModifiedAt()

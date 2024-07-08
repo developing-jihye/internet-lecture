@@ -3,7 +3,6 @@ package practice.internet_lecture.student;
 import org.springframework.stereotype.Service;
 import practice.internet_lecture.course.Course;
 import practice.internet_lecture.course.CourseRepository;
-import practice.internet_lecture.course.EnrollRequestDto;
 
 import java.util.NoSuchElementException;
 
@@ -28,12 +27,22 @@ public class StudentService {
 
     // 수강 신청
     public String enroll(EnrollRequestDto requestDto) {
-        Student student = studentRepository.findById(requestDto.student().getId()).orElseThrow(
-                () -> new NoSuchElementException("해당 아이디의 학생이 없습니다.")
+        // 학생 ID가 null인지 확인
+        if (requestDto.studentId() == null) {
+            throw new IllegalArgumentException("학생 ID가 null입니다.");
+        }
+
+        // 강의 ID가 null인지 확인
+        if (requestDto.courseId() == null) {
+            throw new IllegalArgumentException("강의 ID가 null입니다.");
+        }
+
+        Student student = studentRepository.findById(requestDto.studentId()).orElseThrow(
+                () -> new IllegalArgumentException("해당 아이디의 학생이 없습니다.")
         );
 
-        Course course = courseRepository.findById(requestDto.course().getId()).orElseThrow(
-                () -> new NoSuchElementException("해당 아이디의 강의가 없습니다.")
+        Course course = courseRepository.findById(requestDto.courseId()).orElseThrow(
+                () -> new IllegalArgumentException("해당 아이디의 강의가 없습니다.")
         );
 
         Enrollment newEnrollment = new Enrollment(student, course);
