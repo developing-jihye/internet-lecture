@@ -36,7 +36,7 @@ public class StudentService {
                 () -> new NoSuchElementException("해당 아이디의 강의가 없습니다.")
         );
 
-        Enrollment newEnrollment = new Enrollment();
+        Enrollment newEnrollment = new Enrollment(student, course);
         enrollmentRepository.save(newEnrollment);
         return "수강신청이 완료되었습니다.";
     }

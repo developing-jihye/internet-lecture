@@ -3,6 +3,8 @@ package practice.internet_lecture.student;
 import jakarta.persistence.*;
 import practice.internet_lecture.course.Course;
 
+import java.time.OffsetDateTime;
+
 @Entity
 public class Enrollment {
     @Id
@@ -14,6 +16,8 @@ public class Enrollment {
 
     @ManyToOne
     private Course course;
+
+    private OffsetDateTime enrolledAt;
 
     // constructors
     public Enrollment() {
